@@ -1,0 +1,75 @@
+@startuml
+skinparam maxPixelWidth 4000
+skinparam maxPixelHeight 4000
+skinparam dpi 800
+skinparam class {
+  FontSize 24
+}
+skinparam note {
+  FontSize 24
+}
+skinparam defaultFontSize 24
+left to right direction
+
+class Main {
+  - if __name__ == "__main__"
+  + parser
+  + args
+  + mkdir_(args.model_exp, flag_rm=args.clear_model_exp)
+  + f_log = open(args.model_exp+'/train_{}.log')
+  + trainer(ops=args, f_log=f_log)
+}
+
+class Trainer {
+  + trainer(ops, f_log)
+  + set_seed(seed)
+  + set_learning_rate(optimizer, lr)
+  + load_model(model, pretrained_state_dict)
+  + DataLoader
+  + criterion: MSELoss and WingLoss
+  + optimizer: Adam Optimizer
+}
+
+class ResNet50 {
+  - inplanes: int
+  - dropout_factor: float
+  + __init__(block, layers, num_classes, img_size, dropout_factor)
+  + _make_layer(block, planes, blocks, stride=1)
+  + forward(x)
+  + conv1: Conv2d
+  + bn1: BatchNorm2d
+  + relu: ReLU
+  + maxpool: MaxPool2d
+  + layer1: Sequential
+  + layer2: Sequential
+  + layer3: Sequential
+  + layer4: Sequential
+  + avgpool: AvgPool2d
+  + dropout: Dropout
+  + fc: Linear
+}
+
+class Bottleneck {
+  + expansion: 4
+  + __init__(inplanes, planes, stride=1, downsample=None)
+  + forward(x)
+  + conv1: Conv2d
+  + bn1: BatchNorm2d
+  + relu: ReLU
+  + conv2: Conv2d
+  + bn2: BatchNorm2d
+  + conv3: Conv2d
+  + bn3: BatchNorm2d
+  + downsample: Sequential
+}
+
+Main --> Trainer : uses
+Trainer --> ResNet50 : uses
+ResNet50 <|-- Bottleneck
+
+note below Trainer
+  criterion: MSELoss and WingLoss
+  optimizer: Adam Optimizer
+end note
+
+@enduml

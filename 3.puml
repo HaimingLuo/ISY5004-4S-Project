@@ -1,0 +1,39 @@
+@startuml
+
+skinparam class {
+    FontSize 24
+}
+
+class DataNormalizationAndFeatureEngineering {
+    +normalize_keypoints(keypoints: array): array
+    +relative_coordinates(keypoints: array): array
+    +extract_features(keypoints: array): array
+    +preprocess_keypoints(keypoints: array): array
+}
+
+class DatasetAndPairConstruction {
+    +HandGestureDataset(data_dir: str)
+    +create_positive_pairs(data: array, labels: array): tuple
+    +create_negative_pairs(data: array, labels: array): tuple
+}
+
+class SiameseMLPNetwork {
+    +SiameseNetwork()
+    +contrastive_loss_function(output1: tensor, output2: tensor, label: tensor, margin: float): tensor
+    +train(model: SiameseNetwork, dataloader: DataLoader, optimizer: Optimizer, num_epochs: int)
+}
+
+class FewShotLearningAndEmbeddingStorage {
+    +save_embeddings(model: SiameseNetwork, dataloader: DataLoader, file_path: str)
+    +load_average_embeddings(file_path: str): dict
+    +get_embedding(model: SiameseNetwork, sample: array): array
+    +calculate_similarity(embedding: array, average_embeddings: array): array
+    +classify_sample(embedding: array, average_embeddings: array, threshold: float): int
+    +add_new_class_support_set(model: SiameseNetwork, support_set: list, label: int, file_path: str)
+}
+
+DataNormalizationAndFeatureEngineering --> DatasetAndPairConstruction
+DatasetAndPairConstruction --> SiameseMLPNetwork
+SiameseMLPNetwork --> FewShotLearningAndEmbeddingStorage
+
+@enduml

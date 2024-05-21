@@ -1,0 +1,37 @@
+@startuml
+skinparam rectangle {
+    Rounded True
+    Shadowing False
+}
+
+rectangle "Main Function" as MF {
+    Initialize UI;
+    Load Models;
+}
+
+rectangle "Continuous Sign Language Recognition Module" as CSLR {
+    Load model;
+    Detect keypoints;
+    Recognize sign language;
+    Display recognition results;
+}
+
+rectangle "Specified Sign Language Learning Module" as SSLL {
+    Load model;
+    Compare embeddings;
+    Calculate similarity;
+    Display learning progress;
+}
+
+rectangle "New Sign/Gesture Addition Module" as NSGA {
+    Load model;
+    Upload new sign images;
+    Compute average embedding;
+    Save new sign information;
+}
+
+MF -down-> CSLR : Load and recognize signs in real-time
+MF -down-> SSLL : Train and evaluate sign language learning
+MF -down-> NSGA : Add and learn new signs or gestures
+
+@enduml

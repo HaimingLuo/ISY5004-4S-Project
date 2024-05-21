@@ -1,0 +1,6 @@
+torch
+torch-geometric
+torchvision
+scikit-learn
+PyQt5
+pyqt5-tools
